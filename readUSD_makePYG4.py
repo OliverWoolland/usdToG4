@@ -22,13 +22,11 @@ import pyg4Helpers as pgh
 # Process command line options
 
 parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('usd_input', type=str, nargs=1,
+parser.add_argument('usd_input', type=str, 
                     help='The USD file to convert to GDML')
 args = parser.parse_args()
-print(args.accumulate(args.usd_input))
 
 stage_file = args.usd_input
-sys.exit()
 stage = Usd.Stage.Open(f'{stage_file}')
 
 # ------------------------------------------------------------------------------
@@ -89,13 +87,13 @@ for x in stage.Traverse():
 
 gdmlWriter = pyg4.gdml.Writer()
 gdmlWriter.addDetector(registry)
-gdmlWriter.write(os.path.join(os.path.dirname(__file__), "test.gdml"))
+gdmlWriter.write("test.gdml")
 
 # ------------------------------------------------------------------------------
 # Visualise new layout
 
-viewer = pyg4.visualisation.VtkViewer()
-viewer.addLogicalVolume(worldLogical)
-#viewer.addAxes(20)
-#viewer.setWireframe()
-viewer.view()
+# viewer = pyg4.visualisation.VtkViewer()
+# viewer.addLogicalVolume(worldLogical)
+# #viewer.addAxes(20)
+# #viewer.setWireframe()
+# viewer.view()
