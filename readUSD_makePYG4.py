@@ -5,9 +5,8 @@
 from pxr import Usd
 
 # General
-import os
 import argparse
-import sys
+import pandas as pd
 
 # Geant4
 import pyg4ometry as pyg4
@@ -97,3 +96,29 @@ gdmlWriter.write("test.gdml")
 # #viewer.addAxes(20)
 # #viewer.setWireframe()
 # viewer.view()
+
+# ------------------------------------------------------------------------------
+# Writeout to paraview (following pyg4ometry/test/paraviewExport/ExportToParaviewTest.py)
+# Paraview export of a GDML -> the whole GDML will have one .vtm file.
+
+# exporter = pyg4.visualisation.VtkExporter('/tmp/')
+# df_model = pd.read_csv("/pyg4ometry/pyg4ometry/test/paraviewExport/df_model.csv")
+# df_color = pd.read_csv("/pyg4ometry/pyg4ometry/test/paraviewExport/color_elements.csv")
+
+# exporter.export_to_Paraview(registry,
+#                             fileName='Paraview_gdml_user.pvsm',
+#                             model=False,
+#                             df_model=df_model.copy(),
+#                             df_color=df_color.copy()
+#                             )
+
+# exporter.export_to_Paraview(registry,
+#                             fileName='Paraview_gdml_material.pvsm',
+#                             model=False
+#                             )
+
+# # Paraview export of a model -> each daughter volume of the GDML world volume will have its own .vtm file.
+# df_model = pd.read_csv(localFile("df_model.csv"))
+# df_color = pd.read_csv(localFile("color_elements.csv"))
+# e.export_to_Paraview(reg, fileName='Paraview_model_user.pvsm', model=True, df_model=df_model.copy(), df_color=df_color.copy())
+# e.export_to_Paraview(reg, fileName='Paraview_model_material.pvsm', model=True)
