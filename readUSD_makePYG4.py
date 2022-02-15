@@ -91,11 +91,16 @@ gdmlWriter.write("test.gdml")
 # ------------------------------------------------------------------------------
 # Visualise new layout
 
-# viewer = pyg4.visualisation.VtkViewer()
-# viewer.addLogicalVolume(worldLogical)
+viewer = pyg4.visualisation.VtkViewer()
+viewer.addLogicalVolume(worldLogical)
 # #viewer.addAxes(20)
 # #viewer.setWireframe()
 # viewer.view()
+
+# ------------------------------------------------------------------------------
+# Writeout OBJ
+
+viewer.exportOBJScene("test")
 
 # ------------------------------------------------------------------------------
 # Writeout to paraview (following pyg4ometry/test/paraviewExport/ExportToParaviewTest.py)
