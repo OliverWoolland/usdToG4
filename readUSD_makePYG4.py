@@ -20,7 +20,7 @@ import pyg4Helpers as pgh
 # ------------------------------------------------------------------------------
 # Process command line options
 
-parser = argparse.ArgumentParser(description='Process some integers.')
+parser = argparse.ArgumentParser(description='Convert USD file to GDML')
 parser.add_argument('usd_input', type=str, 
                     help='The USD file to convert to GDML')
 args = parser.parse_args()
@@ -36,9 +36,9 @@ registry = pyg4.geant4.Registry()
 
 # world solid and logical
 worldSolid  = pyg4.geant4.solid.Box("worldSolid",  # name
-                                    100000,        # x size
-                                    100000,        # y size
-                                    100000,        # z size
+                                    25000,        # x size
+                                    50000,        # y size
+                                    25000,        # z size
                                     registry)      # registry
 worldLogical = pyg4.geant4.LogicalVolume(worldSolid,      # solid volume
                                          "G4_Galactic",   # material
@@ -49,10 +49,7 @@ registry.setWorld(worldLogical.name)
 # ------------------------------------------------------------------------------
 # Begin traversing USD
 
-primID = -1
-for x in stage.Traverse():
-    primID = primID + 1
-
+for primID, x in enumerate(stage.Traverse()):
     primType = x.GetTypeName()
     print("PRIM: " + str(primType))
 
@@ -72,6 +69,7 @@ for x in stage.Traverse():
         tess = pgh.addMesh(x, registry, worldLogical, primID)
     else:
         print("Missed prim type: " + primType)
+    print(f"Tess {tess}")
         
 # ------------------------------------------------------------------------------
 # Perform check on geometry
@@ -95,35 +93,9 @@ viewer = pyg4.visualisation.VtkViewer()
 viewer.addLogicalVolume(worldLogical)
 # #viewer.addAxes(20)
 # #viewer.setWireframe()
-# viewer.view()
+#viewer.view()
 
 # ------------------------------------------------------------------------------
 # Writeout OBJ
 
 viewer.exportOBJScene("test")
-
-# ------------------------------------------------------------------------------
-# Writeout to paraview (following pyg4ometry/test/paraviewExport/ExportToParaviewTest.py)
-# Paraview export of a GDML -> the whole GDML will have one .vtm file.
-
-# exporter = pyg4.visualisation.VtkExporter('/tmp/')
-# df_model = pd.read_csv("/pyg4ometry/pyg4ometry/test/paraviewExport/df_model.csv")
-# df_color = pd.read_csv("/pyg4ometry/pyg4ometry/test/paraviewExport/color_elements.csv")
-
-# exporter.export_to_Paraview(registry,
-#                             fileName='Paraview_gdml_user.pvsm',
-#                             model=False,
-#                             df_model=df_model.copy(),
-#                             df_color=df_color.copy()
-#                             )
-
-# exporter.export_to_Paraview(registry,
-#                             fileName='Paraview_gdml_material.pvsm',
-#                             model=False
-#                             )
-
-# # Paraview export of a model -> each daughter volume of the GDML world volume will have its own .vtm file.
-# df_model = pd.read_csv(localFile("df_model.csv"))
-# df_color = pd.read_csv(localFile("color_elements.csv"))
-# e.export_to_Paraview(reg, fileName='Paraview_model_user.pvsm', model=True, df_model=df_model.copy(), df_color=df_color.copy())
-# e.export_to_Paraview(reg, fileName='Paraview_model_material.pvsm', model=True)
